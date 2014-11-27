@@ -11,7 +11,7 @@ Requirements:
 ## Build & Run ##
 
 ```sh
-$ MEASUREMENTS_API_KEYS_LOCATION=src/test/resources/test-api-keys.properties MEASUREMENTS_API_DATABASE_PLATFORM=h2 sbt
+$ sbt
 > container:start
 > browse
 ```
