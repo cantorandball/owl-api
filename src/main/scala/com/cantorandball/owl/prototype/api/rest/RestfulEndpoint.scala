@@ -7,8 +7,9 @@ import java.text.SimpleDateFormat
 import java.net.URI
 
 trait RestfulEndpoint extends JacksonJsonSupport
-                              with JsonValidationErrorHandling {
-  this: ScalatraServlet =>
+                              with JsonValidationErrorHandling
+                              with CorsSupport {
+  this: ScalatraBase =>
 
   protected implicit val jsonFormats: Formats = new DefaultFormats {
     override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -26,8 +27,8 @@ trait RestfulEndpoint extends JacksonJsonSupport
   private def rootUri = new URI(requestUri.getScheme, requestUri.getUserInfo, requestUri.getHost, requestUri.getPort, request.getContextPath, null, null)
   def root: String = rootUri.toString
 
-  before() {
-    contentType = formats("json")
+  options("/*"){
+    response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
   }
 
 }

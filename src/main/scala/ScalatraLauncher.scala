@@ -5,7 +5,9 @@ import org.scalatra.servlet.ScalatraListener
 
 object ScalatraLauncher extends App {
 
-  println("Launching Capability Measurements API.")
+  println("Launching Owl Prototype API.")
+
+  System.setProperty("org.eclipse.jetty.server.Request.maxFormContentSize", "500000000")
 
   val server = new Server
   val connector = new ServerConnector(server)

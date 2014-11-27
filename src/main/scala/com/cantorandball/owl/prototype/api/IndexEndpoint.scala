@@ -1,10 +1,9 @@
 package com.cantorandball.owl.prototype.api
 
-import org.slf4j.LoggerFactory
 import org.scalatra._
 import com.cantorandball.owl.prototype.api.rest._
 
-trait IndexEndpoint extends RestfulEndpoint {
+trait IndexEndpoint extends Endpoint {
   this: ScalatraServlet =>
 
   case class Index (
@@ -17,7 +16,8 @@ trait IndexEndpoint extends RestfulEndpoint {
           name = "owl-api"
       ),
       links = Map(
-        "self" -> self
+        "self" -> self,
+        "video" -> (self + "videos")
       )
     )
   }
