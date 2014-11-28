@@ -8,6 +8,7 @@ trait VideoEndpoint extends Endpoint {
   this: ScalatraServlet with Videos =>
 
   post("/videos") {
+    contentType = "text/plain"
     val job = videos.store(audio = decode(params("audio")), video = decode(params("video")))
     Accepted(headers = Map("Content-Location" -> (self + "/jobs" + url(job.id))))
   }

@@ -11,6 +11,10 @@ trait RestfulEndpoint extends JacksonJsonSupport
                               with CorsSupport {
   this: ScalatraBase =>
 
+  before() {
+    contentType = formats("json")
+  }
+
   protected implicit val jsonFormats: Formats = new DefaultFormats {
     override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm")
   }
