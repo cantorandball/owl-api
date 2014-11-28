@@ -53,10 +53,10 @@ trait VideosDatabase extends Videos {
 
       log.info("started video processing job file=[" + id + "]")
 
-      val processFile = tmp.resolve(id + ".avi")
+      val processFile = tmp.resolve(id + ".webm")
 
       val f  = Future {
-        val exit = Seq("ffmpeg", "-i", audioFile.toString, "-i", videoFile.toString, "-acodec", "copy", "-vcodec", "copy", processFile.toString).!
+        val exit = Seq("ffmpeg", "-i", audioFile.toString, "-i", videoFile.toString, "-c:v", "libvpx", "-b:v", "1M", "-c:a", "libvorbis", processFile.toString).!
         if(exit != 0) throw new RuntimeException("failed to process video result=" + exit)
       }
 
