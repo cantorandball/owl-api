@@ -8,7 +8,7 @@ trait VideoJobEndpoint extends Endpoint {
 
   get("/videos/jobs/:id") {
     videos.job(params("id")) match {
-      case success: Complete   => SeeOther("")
+      case success: Complete   => SeeOther(root + "/videos/" + params("id"))
       case _                   => videos.job(params("id"))
     }
   }

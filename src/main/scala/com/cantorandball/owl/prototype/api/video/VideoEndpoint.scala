@@ -7,6 +7,11 @@ import com.cantorandball.owl.prototype.api.Endpoint
 trait VideoEndpoint extends Endpoint {
   this: ScalatraServlet with Videos =>
 
+  get("/videos/:id") {
+    contentType = "video/webm"
+    videos.find(params("id"))
+  }
+
   post("/videos") {
     contentType = "text/plain"
     val job = videos.store(audio = decode(params("audio")), video = decode(params("video")))

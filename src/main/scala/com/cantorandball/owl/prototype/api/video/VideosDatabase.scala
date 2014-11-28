@@ -79,6 +79,8 @@ trait VideosDatabase extends Videos {
       jobs(id)
     }
 
+    def find(id: String): Array[Byte] = readAllBytes(tmp.resolve(id + ".webm"))
+
   }
 
 }
