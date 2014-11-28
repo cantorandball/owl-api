@@ -1,6 +1,6 @@
 # Owl API Prototype
 
-Prototype of a 
+Prototype of a API for Personal History project.
 
 Requirements:
 
@@ -12,7 +12,5 @@ Requirements:
 ## Build & Run ##
 
 ```sh
-$ sbt
-> container:start
-> browse
+$ sbt run
 ```
