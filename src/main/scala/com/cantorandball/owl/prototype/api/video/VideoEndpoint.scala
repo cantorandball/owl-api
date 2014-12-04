@@ -15,7 +15,10 @@ trait VideoEndpoint extends Endpoint {
   post("/videos") {
     contentType = "text/plain"
     val job = videos.store(audio = decode(params("audio")), video = decode(params("video")))
-    Accepted(headers = Map("Content-Location" -> (self + "/jobs" + url(job.id))))
+    response.setStatus(202)
+    val uri = self + "/jobs" + url(job.id)
+    response.addHeader("Content-Location", uri)
+    uri
   }
 
   private val dataPattern = """^data\:.*\;base64\,(.*)$""".r
