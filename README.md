@@ -15,6 +15,14 @@ Requirements:
 $ sbt run
 ```
 
+Open [http://localhost:8080/](http://localhost:8080/) in your browser.
+
+You can configure the application with the following environmental variables:
+
+| Environment Variable                 | Description
+|--------------------------------------|-------------
+| `OWL_API_VIDEO_STORAGE_PATH`         | (Optional) Path to folder where video files should be stored. If not supplied a temporary folder will be created.
+
 ## Infrastructure ##
 
 To install the web service on Ubuntu you need to create the following Upstart script:
@@ -31,6 +39,8 @@ setuid owl-api
 setgid owl-api
 
 chdir /home/owl-api/owl-api
+
+env OWL_API_VIDEO_STORAGE_PATH=/home/owl-api/video
 
 exec sh /home/owl-api/owl-api/bin/owl-api
 ```

@@ -14,6 +14,7 @@ class ScalatraBootstrap extends LifeCycle {
                            with H2SlickDatabase
                            with H2SlickDriver
                            with VideosDatabase
+                           with EnvironmentVariablesConfiguration
 
   override def init(context: ServletContext) {
     context.mount(servlet, "/*")

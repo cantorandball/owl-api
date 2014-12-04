@@ -9,30 +9,30 @@ import java.nio.file.StandardCopyOption
 import java.io.ByteArrayInputStream
 import java.nio.file.Paths
 import java.nio.file.Path
-
 import scala.concurrent._
 import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
-
 import scala.sys.process._
 import scala.util.{Success, Failure}
+import com.cantorandball.owl.prototype.api.Configuration
 
 trait VideosDatabase extends Videos {
+  this: Configuration =>
 
-  private[this] val tmp = createTempDirectory("videos-")
+  private[this] val path = videoStoragePath.getOrElse(createTempDirectory("videos-"))
 
-  override def videos = new FileSystemVideoRepository(tmp)
+  override def videos = new FileSystemVideoRepository(path)
 
   private val jobs = scala.collection.mutable.Map[String, VideoJob]()
 
-  class FileSystemVideoRepository(tmp: Path) extends VideoRepository {
+  class FileSystemVideoRepository(path: Path) extends VideoRepository {
 
     private[this] val log = LoggerFactory.getLogger(classOf[FileSystemVideoRepository])
 
     private val filePattern = """^audio-(.*)\.data""".r
 
     override def store(audio: Array[Byte], video: Array[Byte]): VideoJob = {
-      val audioFile = createTempFile(tmp, "audio-", ".data")
+      val audioFile = createTempFile(path, "audio-", ".data")
 
       copy(new ByteArrayInputStream(audio), audioFile, StandardCopyOption.REPLACE_EXISTING)
 
@@ -43,7 +43,7 @@ trait VideosDatabase extends Videos {
         case _ => throw new RuntimeException("could not match file=" + audioFile)
       }
 
-      val videoFile = tmp.resolve("video-" + id + ".data")
+      val videoFile = path.resolve("video-" + id + ".data")
 
       copy(new ByteArrayInputStream(video), videoFile, StandardCopyOption.REPLACE_EXISTING)
 
@@ -53,7 +53,7 @@ trait VideosDatabase extends Videos {
 
       log.info("started video processing job file=[" + id + "]")
 
-      val processFile = tmp.resolve(id + ".webm")
+      val processFile = path.resolve(id + ".webm")
 
       val f  = Future {
         val exit = Seq("ffmpeg", "-i", audioFile.toString, "-i", videoFile.toString, "-c:v", "libvpx", "-b:v", "1M", "-c:a", "libvorbis", processFile.toString).!
@@ -79,7 +79,7 @@ trait VideosDatabase extends Videos {
       jobs(id)
     }
 
-    def find(id: String): Array[Byte] = readAllBytes(tmp.resolve(id + ".webm"))
+    def find(id: String): Array[Byte] = readAllBytes(path.resolve(id + ".webm"))
 
   }
 

@@ -3,12 +3,17 @@ package com.cantorandball.owl.prototype.api.video
 import org.scalatra.test.specs2.MutableScalatraSpec
 import org.scalatra.ScalatraServlet
 import org.specs2.matcher.JsonMatchers
-
 import java.net.URI
+import com.cantorandball.owl.prototype.api.Configuration
 
 class VideoEndpointSpec extends MutableScalatraSpec with JsonMatchers {
 
-  addServlet(new ScalatraServlet with VideoEndpoint with VideoJobEndpoint with VideosDatabase, "/*")
+  private trait EmptyConfiguration extends Configuration {
+    override val videoStoragePath = None
+  }
+
+  addServlet(new ScalatraServlet with VideoEndpoint with VideoJobEndpoint with VideosDatabase
+                           with EmptyConfiguration, "/*")
 
   "POST to /videos" should {
 
