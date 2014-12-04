@@ -75,8 +75,9 @@ trait VideosDatabase extends Videos {
     }
 
     def job(id: String): VideoJob = {
-      log.info("job status=" + jobs(id))
-      jobs(id)
+      val job = jobs.get(id)
+      log.info("job status=" + job)
+      job.getOrElse(Complete(id))
     }
 
     def find(id: String): Array[Byte] = readAllBytes(path.resolve(id + ".webm"))
